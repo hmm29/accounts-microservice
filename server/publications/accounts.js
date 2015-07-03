@@ -1,7 +1,7 @@
 Meteor.publishComposite("accounts", function() {
   return {
     find: function() {
-      return Accounts.find({});
+      return db.accounts.find({});
     }
     // ,
     // children: [

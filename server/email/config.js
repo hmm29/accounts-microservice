@@ -1,9 +1,13 @@
 Meteor.startup(function() {
 
+  /*
+  Note: must set up Mailgun for this to work
+
   Meteor.Mailgun.config({
     username: 'postmaster@domain.com',
     password: 'password-goes-here'
   });
+  */
 
   Meteor.methods({
     'sendContactEmail': function(name, email, message) {

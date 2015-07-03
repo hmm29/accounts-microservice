@@ -1,0 +1,14 @@
+<template name="accountsAdminEmails">
+  <div class="template-accounts-admin-emails">
+    <div class="page-header">
+      <h1>Accounts Admin Emails</h1>
+    </div>
+
+    <ul class="list-group">
+      {{#each accountsAdminEmails}}
+        <li class="list-group-item">Email: {{ email }} <span class="label label-default"> {{ addedBy }}</span></li>
+      {{/each}}
+    </ul>
+
+  </div>
+</template>

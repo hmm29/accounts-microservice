@@ -1,5 +1,5 @@
 Router.route('/', {
-  name: 'home'
+  name: 'home',
 });
 
 Router.route('/dashboard', {
@@ -7,6 +7,11 @@ Router.route('/dashboard', {
   controller: 'DashboardController'
 });
 
+Router.route('/accountsAdminEmails', {
+  name: 'accountsAdminEmails',
+  controller: 'AccountsAdminEmailsController'
+});
+
 Router.plugin('ensureSignedIn', {
-  only: ['dashboard']
+  only: ['home','dashboard']
 });

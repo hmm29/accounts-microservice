@@ -3,7 +3,7 @@ if(Meteor.isClient) {
       options: {
         // Meteor.settings[Meteor.settings.environment].public.meta.title
         title: 'Venture Account Microservice',
-        suffix: 'Accounts'
+        suffix: 'AccountsSvc'
       }
   });
 }

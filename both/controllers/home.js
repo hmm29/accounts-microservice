@@ -1,5 +1,3 @@
 HomeController = AppController.extend({
-  data: {
-
-  }
+  
 });

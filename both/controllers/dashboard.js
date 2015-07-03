@@ -1,9 +1,11 @@
 DashboardController = AppController.extend({
   waitOn: function() {
-    return this.subscribe('accounts');
+    if (Meteor.user() && Roles.userIsInRole(Meteor.userId(), ['admin-privileges'], 'accounts-admin')) {
+      return this.subscribe('accounts');
+    }
   },
   data: {
-    accounts: Accounts.find({})
+    accounts: db.accounts.find({})
   },
   onAfterAction: function () {
     Meta.setTitle('Dashboard');
