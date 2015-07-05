@@ -1,7 +1,7 @@
 var mySubmitFunc = function(error) {
   if(error) {
     if(AccountsTemplates.getState() === "signUp") {
-      alert('WARNING: UNAUTHORIZED USER! \nThis activity has been logged and will be reported.');
+      alert('403 FORBIDDEN\nThis activity has been logged and will be reported.');
     }
   }
 }

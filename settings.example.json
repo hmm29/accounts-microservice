@@ -1,21 +1,35 @@
 {
-  "production" : {
-    "twitter" : {
-      "oauth_key" : "<oauth_key>",
-      "oauth_secret" : "<oauth_secret>",
-      "api_key" : "<api_key>"
-    }
+  _id: '',
+  createdAt: '',
+  sinch: clientId: '',
+  name: '',
+  firstName: '',
+  lastName: '',
+  activityPreference: '',
+  gender: '',
+  bio: '',
+  ageRange: '',
+  location: {
+    type: "Point",
+    coordinates: []
   },
-  "development" : {
-    "twitter" : {
-      "oauth_key" : "<oauth_key>",
-      "oauth_secret" : "<oauth_secret>",
-      "api_key" : "<api_key>"
-    }
+  matchingSettings: {
+    maxSearchDistance: '',
+    ageRangeLower: '',
+    ageRangeUpper: '',
+    genderPreferences: ''
   },
-  "public" : {
-    "meta" : {
-      "title" : "Project Title"
-    }
+  discoverySettings: {
+    genderSelections: ''
+  },
+  status: {
+    online: true,
+    lastLogin: {
+      date: '',
+      ipAddr: '',
+      userAgent: ''
+    },
+    idle: false
   }
 }
+

@@ -24,3 +24,12 @@ aldeed:autoform
 
 # Debugging
 msavin:mongol
+
+# Accounts & Roles
+mizzao:user-status
+
+# Kadira
+# meteorhacks:kadira
+
+# Redis
+slava:redis-livedata
