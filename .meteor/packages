@@ -33,3 +33,6 @@ mizzao:user-status
 
 # Redis
 slava:redis-livedata
+
+# lodash
+stevezhu:lodash

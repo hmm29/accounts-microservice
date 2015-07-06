@@ -1,0 +1,49 @@
+{
+  // Server authentication info
+  "servers": [
+    {
+      "host": "104.236.255.41",
+      "username": "hmm",
+      // or pem file (ssh based authentication)
+      //"pem": "~/.ssh/id_rsa"
+    },
+    {
+      "host": "104.236.77.44",
+      "username": "hmm",
+      // or pem file (ssh based authentication)
+      //"pem": "~/.ssh/id_rsa"
+    }
+  ],
+
+  // Install MongoDB in the server, does not destroy local MongoDB on future setup
+  "setupMongo": true,
+
+  // WARNING: Node.js is required! Only skip if you already have Node.js installed on server.
+  "setupNode": true,
+
+  // WARNING: If nodeVersion omitted will setup 0.10.36 by default. Do not use v, only version number.
+  "nodeVersion": "0.12.6",
+
+  // Install PhantomJS in the server
+  "setupPhantom": true,
+
+  // Show a progress bar during the upload of the bundle to the server.
+  // Might cause an error in some rare cases if set to true, for instance in Shippable CI
+  "enableUploadProgressBar": true,
+
+  // Application name (No spaces)
+  "appName": "accountsSvc",
+
+  // Location of app (local directory)
+  "app": "/Users/harrisonmiller/CodeProjects/accountsSvc",
+
+  // Configure environment
+  "env": {
+    "PORT": 30480,
+    "MONGO_URL": "mongodb://username:password@db1.ventureappofficial.me:27017/ventureappofficial",
+    "MONGO_OPLOG_URL": "mongodb://oplogger:password@db1.ventureappofficial.me:27017/ventureappofficial?authSource=ventureappofficial",
+    "REDIS_URL": "redis://45.55.195.109:6379",
+    "REDIS_CONFIGURE_KEYSPACE_NOTIFICATIONS":1,
+    "METEOR_ENV": "production"
+  }
+}

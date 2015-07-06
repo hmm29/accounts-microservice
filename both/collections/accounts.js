@@ -5,10 +5,12 @@ db.accounts.before.insert(function (userId, doc) {
 
     // if account is being inserted by admin and not by Venture app user
     // Venture app will call 'AccountsSvc.addUser' with facebookAccessToken param
-    if (!(doc.services && doc.services.facebook.accessToken)) {
+    if (!(doc.services && doc.services.facebookAccessToken)) {
         doc.createdBy = Meteor.userId();
     }
 });
+
+// Accounts indexes
 
 //Schema goes here
 // TODO: add schema for facebook access token!!!!

@@ -19,16 +19,15 @@ Meteor.methods({
             check(newUserFacebookAccessToken, String);
             check(currentUserFacebookAccessToken, String);
 
-            // prevent adding redundant access token field
-            if (!data.services.facebook.accessToken) {
-                _.extend(data, {'services.facebook.accessToken': newUserFacebookAccessToken});
+            if (!(data.services && data.services.facebookAccessToken)) {
+                _.assign(data, {'services': {'facebookAccessToken': newUserFacebookAccessToken}});
             }
 
             accountId = db.accounts.insert(data);
             return accountId;
         }
 
-        if (db.accounts.findOne({'services.facebook.accessToken': newUserFacebookAccessToken})) {
+        if (db.accounts.findOne({'services.facebookAccessToken': newUserFacebookAccessToken})) {
             throw new Meteor.Error(403, "Already created account");
         }
 
@@ -44,15 +43,8 @@ Meteor.methods({
         var account;
         check(selector, Object);
 
-        account = db.accounts.findOne(selector, {
-            firstName: 1,
-            username: 1,
-            activityPreference: 1,
-            bio: 1,
-            gender: 1
-        });
-
-        if (account) return account;
+        account = db.accounts.findOne(selector);
+        if (account) return _.pick(account, 'firstName', 'activityPreference', 'picture', 'bio', 'gender');
 
         throw new Meteor.Error(404, "User does not exist");
     },
@@ -67,14 +59,10 @@ Meteor.methods({
 
         check(selector, Object);
 
-        accounts = db.accounts.find(selector, {
-          firstName: 1,
-          username: 1,
-          activityPreference: 1,
-          bio: 1,
-          gender: 1
-        }).fetch();
-        if (accounts) return accounts;
+        accounts = db.accounts.find(selector).fetch();
+        if (accounts) return _.map(accounts, function (account) {
+            return _.pick(account, 'firstName', 'activityPreference', 'picture', 'bio', 'gender');
+        });
 
         throw new Meteor.Error(403, "Users do not exist");
     },
@@ -95,11 +83,13 @@ Meteor.methods({
         check(currentUserFacebookAccessToken, String);
 
         targetAccount = db.accounts.findOne(selector);
-        if (targetAccount && targetAccount.services.facebook.accessToken === currentUserFacebookAccessToken) {
+        if (targetAccount && targetAccount.services.facebookAccessToken === currentUserFacebookAccessToken) {
             num_of_accounts_updated = db.accounts.update(selector, {$set: data});
         }
 
         return num_of_accounts_updated;
+
+        throw new Meteor.Error(403, "Cannot perform update");
     },
     /**
      * delete a Venture user account from the database
@@ -116,14 +106,14 @@ Meteor.methods({
         var targetAccount;
 
         check(selector, Object);
-        check(facebookAccessToken, String);
+        check(currentUserFacebookAccessToken, String);
 
         targetAccount = db.accounts.findOne(selector);
-        if (targetAccount && targetAccount.services.facebook.accessToken === currentUserFacebookAccessToken) {
+        if (targetAccount && targetAccount.services.facebookAccessToken === currentUserFacebookAccessToken) {
             num_of_accounts_deleted = db.accounts.remove(selector);
             return num_of_accounts_deleted;
         }
 
-        throw new Meteor.Error(401, "Not authorized to delete other users");
+        throw new Meteor.Error(403, "Cannot perform delete");
     }
 });
