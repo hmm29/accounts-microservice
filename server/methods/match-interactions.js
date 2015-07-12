@@ -1,11 +1,15 @@
 /*
+ MATCH INTERACTIONS API
+
  Example API call:
 
  Meteor.call('MatchInteractions.sendRequest', '507f1f77bcf86cd799439011',
- '807a1f77bcc86ad790445611', 'sent', function(err,resp) {
-  if(resp) console.log(resp);
+ '807a1f77bcc86ad790445611', function(err,resp) {
+  if(resp) {
+    // do something here
+  }
  });
- 
+
  */
 
 Meteor.methods({

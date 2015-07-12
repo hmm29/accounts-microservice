@@ -1,4 +1,18 @@
-// Harrison Miller: API for Venture AccountsSvc
+/*
+ ACCOUNTS API
+
+ Example API call:
+
+ Meteor.call('AccountsSvc.addUser',
+ {name: 'Harrison Miller', firstName: 'Harrison',
+ activityPreference: 'code', ...}, '<FACEBOOK_ACCESS_TOKEN>'
+ '<FACEBOOK_ACCESS_TOKEN>', function(err, resp) {
+ if (resp) {
+  //do something here
+ }
+})
+
+*/
 
 Meteor.methods({
     /**
@@ -9,7 +23,7 @@ Meteor.methods({
      * @param {Boolean} currentUserFacebookAccessToken
      * @return {String} accountId
      */
-    'AccountsSvc.addUser': function (data, newUserFacebookAccessToken, currentUserFacebookAccessToken) {
+    'Accounts.addUser': function (data, newUserFacebookAccessToken, currentUserFacebookAccessToken) {
         var accessTokensDoMatch = (newUserFacebookAccessToken === currentUserFacebookAccessToken);
 
         if (!db.accounts.findOne(data) && accessTokensDoMatch) {
@@ -39,7 +53,7 @@ Meteor.methods({
      * @param {Object} selector
      * @return {Object} account
      */
-    'AccountsSvc.getUser': function (selector) {
+    'Accounts.getUser': function (selector) {
         var account;
         check(selector, Object);
 
@@ -54,7 +68,7 @@ Meteor.methods({
      * @param {Object} selector
      * @return {Array} accounts
      */
-    'AccountsSvc.getMultipleUsers': function (selector) {
+    'Accounts.getMultipleUsers': function (selector) {
         var accounts;
 
         check(selector, Object);
@@ -74,7 +88,7 @@ Meteor.methods({
      * @param {String} currentUserFacebookAccessToken
      * @return {Number} num_of_accounts_updated
      */
-    'AccountsSvc.updateUser': function (selector, data, currentUserFacebookAccessToken) {
+    'Accounts.updateUser': function (selector, data, currentUserFacebookAccessToken) {
         var num_of_accounts_updated = 0;
         var targetAccount;
 
@@ -101,7 +115,7 @@ Meteor.methods({
      * Note: User can only delete his or her own account
      * React Native code must pass the current user's facebook access token
      */
-    'AccountsSvc.deleteUser': function (selector, currentUserFacebookAccessToken) {
+    'Accounts.deleteUser': function (selector, currentUserFacebookAccessToken) {
         var num_of_accounts_deleted;
         var targetAccount;
 
