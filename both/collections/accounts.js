@@ -2,12 +2,26 @@ db.accounts = new Mongo.Collection('accounts');
 
 db.accounts.before.insert(function (userId, doc) {
     doc.createdAt = moment().toDate();
+    doc.sinchClientId = '';
 
     // if account is being inserted by admin and not by Venture app user
     // Venture app will call 'AccountsSvc.addUser' with facebookAccessToken param
     if (!(doc.services && doc.services.facebookAccessToken)) {
         doc.createdBy = Meteor.userId();
     }
+});
+
+Schema.AccountAgeRange = new SimpleSchema({
+  min: {
+    type: Number,
+    min: 13,
+    max: 129
+  },
+  max: {
+    type: Number,
+    min: 14,
+    max: 130
+  }
 });
 
 Schema.AccountLocation = new SimpleSchema({
@@ -60,16 +74,13 @@ Schema.AccountServices = new SimpleSchema({
   }
 });
 
+Schema.AccountLoginStatus = new SimpleSchema({
+  online: {
+    type: Boolean
+  }
+});
+
 Schema.Account = new SimpleSchema({
-    _id: {
-      type: String
-    },
-    createdAt: {
-        type: Date
-    },
-    sinchClientId: {
-      type: String
-    },
     name: {
         type: String,
         regEx: /^[a-zA-Z_ -]{2,25}$/,
@@ -166,7 +177,7 @@ Schema.Account = new SimpleSchema({
         optional: true
     },
     ageRange: {
-      type: Object
+      type: Schema.AccountAgeRange
     },
     location: {
         type: Schema.AccountLocation
@@ -181,9 +192,7 @@ Schema.Account = new SimpleSchema({
         type: Schema.AccountDiscoveryPreferences
     },
     status: {
-        type: Object,
-        optional: true,
-        blackbox: true
+        type: Schema.AccountLoginStatus
     }
 });
 
