@@ -1,17 +1,5 @@
 /*
  ACCOUNTS API
-
- Example API call:
-
- Meteor.call('AccountsSvc.addUser',
- {name: 'Harrison Miller', firstName: 'Harrison',
- activityPreference: 'code', ...}, '<FACEBOOK_ACCESS_TOKEN>'
- '<FACEBOOK_ACCESS_TOKEN>', function(err, resp) {
- if (resp) {
-  //do something here
- }
-})
-
 */
 
 Meteor.methods({

@@ -80,7 +80,7 @@ Schema.Account = new SimpleSchema({
         type: String,
         regEx: /^[a-zA-Z -]{0,25}$/,
         index: 1,
-        label: "first name",
+        label: "first name"
     },
     lastName: {
         type: String,
@@ -161,13 +161,13 @@ Schema.Account = new SimpleSchema({
     },
     bio: {
         type: String,
-        regex: /^[a-z0-9A-Z \/_?:;.,-]{0,15}$/,
+        regEx: /^[a-z0-9A-Z \/_?:;.,-]{0,15}$/,
         label: "bio",
         optional: true
     },
     email: {
       type: String,
-      regEx: SimpleSchema.Regex.Email
+      regEx: SimpleSchema.RegEx.Email
     },
     ageRange: {
       type: Schema.AccountAgeRange
