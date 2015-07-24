@@ -2,13 +2,6 @@ db.accounts = new Mongo.Collection('accounts');
 
 db.accounts.before.insert(function (userId, doc) {
     doc.createdAt = moment().toDate();
-    doc.sinchClientId = '';
-
-    // if account is being inserted by admin and not by Venture app user
-    // Venture app will call 'AccountsSvc.addUser' with facebookAccessToken param
-    if (!(doc.services && doc.services.facebookAccessToken)) {
-        doc.createdBy = Meteor.userId();
-    }
 });
 
 Schema.AccountAgeRange = new SimpleSchema({
@@ -68,12 +61,6 @@ Schema.AccountDiscoveryPreferences = new SimpleSchema({
   }
 });
 
-Schema.AccountServices = new SimpleSchema({
-  facebookAccessToken: {
-    type: String
-  }
-});
-
 Schema.AccountLoginStatus = new SimpleSchema({
   online: {
     type: Boolean
@@ -81,9 +68,12 @@ Schema.AccountLoginStatus = new SimpleSchema({
 });
 
 Schema.Account = new SimpleSchema({
+    ventureId: {
+        type: String
+    },
     name: {
         type: String,
-        regEx: /^[a-zA-Z_ -]{2,25}$/,
+        regEx: /^[a-zA-Z_ -]{2,35}$/,
         label: "name"
     },
     firstName: {
@@ -111,79 +101,79 @@ Schema.Account = new SimpleSchema({
         optional: true
     },
     picture: {
-      type: String
+      type: String,
+      regEx: SimpleSchema.RegEx.Url
     },
     gender: {
         type: String,
         allowedValues: [
-            "male",
+            "agender",
+            "androgyne",
+            "androgynous",
+            "bigender",
+            "cis",
+            "cisgender",
+            "cis female",
+            "cis male",
+            "cis man",
+            "cis woman",
+            "cisgender female",
+            "cisgender male",
+            "cisgender man",
+            "cisgender woman",
             "female",
+            "female to male",
+            "ftm",
+            "gender fluid",
+            "gender nonconforming",
+            "gender questioning",
+            "gender variant",
+            "genderqueer",
+            "intersex",
+            "male",
+            "male to female",
+            "mtf",
+            "neither",
+            "neutrois",
+            "non-binary",
             "other",
-            "Male",
-            "Female",
-            "Agender",
-            "Androgyne",
-            "Androgynous",
-            "Bigender",
-            "Cis",
-            "Cisgender",
-            "Cis Female",
-            "Cis Male",
-            "Cis Man",
-            "Cis Woman",
-            "Cisgender Female",
-            "Cisgender Male",
-            "Cisgender Man",
-            "Cisgender Woman",
-            "Female to Male",
-            "FTM",
-            "Gender Fluid",
-            "Gender Nonconforming",
-            "Gender Questioning",
-            "Gender Variant",
-            "Genderqueer",
-            "Intersex",
-            "Male to Female",
-            "MTF",
-            "Neither",
-            "Neutrois",
-            "Non-binary",
-            "Other",
-            "Pangender",
-            "Trans Person",
-            "Trans Female",
-            "Trans Male",
-            "Trans Man",
-            "Trans Woman",
-            "Transfeminine",
-            "Transgender",
-            "Transgender Female",
-            "Transgender Male",
-            "Transgender Man",
-            "Transgender Person",
-            "Transgender Woman",
-            "Transmasculine",
-            "Transsexual Female",
-            "Transsexual Male",
-            "Transsexual Man",
-            "Transsexual Person",
-            "Transsexual Woman",
-            "Two-Spirit"],
+            "pangender",
+            "trans person",
+            "trans female",
+            "trans male",
+            "trans man",
+            "trans woman",
+            "transfeminine",
+            "transgender",
+            "transgender female",
+            "transgender male",
+            "transgender man",
+            "transgender person",
+            "transgender woman",
+            "transmasculine",
+            "transsexual female",
+            "transsexual male",
+            "transsexual man",
+            "transsexual person",
+            "transsexual woman",
+            "two-spirit"],
         optional: true
     },
     bio: {
         type: String,
+        regex: /^[a-z0-9A-Z \/_?:;.,-]{0,15}$/,
         label: "bio",
         optional: true
+    },
+    email: {
+      type: String,
+      regEx: SimpleSchema.Regex.Email
     },
     ageRange: {
       type: Schema.AccountAgeRange
     },
     location: {
         type: Schema.AccountLocation
-    },
-    services: {
-        type: Schema.AccountServices
     },
     matchingPreferences: {
         type: Schema.AccountMatchingSettings

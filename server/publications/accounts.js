@@ -1,5 +1,5 @@
 // ensure 2d sphere index
-db.accounts.createIndex({location: "2dsphere"});
+db.accounts.createIndex({location: "2d"});
 
 Meteor.publishComposite("accounts", function() {
   return {

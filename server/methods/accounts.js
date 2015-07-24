@@ -19,29 +19,33 @@ Meteor.methods({
      * add a Venture user account to database
      * @method 'AccountsSvc.addUser'
      * @param {Object} data
-     * @param {String} newUserFacebookAccessToken
-     * @param {Boolean} currentUserFacebookAccessToken
+     * @param {String} newUserVentureId
+     * @param {Boolean} currentUserVentureId
      * @return {String} accountId
      */
-    'Accounts.addUser': function (data, newUserFacebookAccessToken, currentUserFacebookAccessToken) {
-        var accessTokensDoMatch = (newUserFacebookAccessToken === currentUserFacebookAccessToken);
+    'Accounts.addUser': function (data, newUserVentureId, currentUserVentureId) {
+        var ventureIdsDoMatch = (newUserVentureId === currentUserVentureId);
 
-        if (!db.accounts.findOne(data) && accessTokensDoMatch) {
+        if (!db.accounts.findOne(data) && ventureIdsDoMatch) {
             var accountId;
 
             check(data, Object);
-            check(newUserFacebookAccessToken, String);
-            check(currentUserFacebookAccessToken, String);
+            check(newUserVentureId, String);
+            check(currentUserVentureId, String);
 
-            if (!(data.services && data.services.facebookAccessToken)) {
-                _.assign(data, {'services': {'facebookAccessToken': newUserFacebookAccessToken}});
+            if (!(data.ventureId)) {
+                _.assign(data, {ventureId: newUserVentureId});
+            }
+
+            if (data.ventureId && data.ventureId !== newUserVentureId) {
+                throw new Meteor.Error(403, "New user data Venture Id does not match current user's Venture ID");
             }
 
             accountId = db.accounts.insert(data);
             return accountId;
         }
 
-        if (db.accounts.findOne({'services.facebookAccessToken': newUserFacebookAccessToken})) {
+        if (db.accounts.findOne({ventureId: newUserVentureId})) {
             throw new Meteor.Error(403, "Already created account");
         }
 
@@ -58,7 +62,7 @@ Meteor.methods({
         check(selector, Object);
 
         account = db.accounts.findOne(selector);
-        if (account) return _.pick(account, 'firstName', 'activityPreference', 'picture', 'bio', 'gender');
+        if (account) return _.pick(account, 'firstName', 'activityPreference', 'picture', 'bio', 'gender', 'ageRange');
 
         throw new Meteor.Error(404, "User does not exist");
     },
@@ -75,7 +79,7 @@ Meteor.methods({
 
         accounts = db.accounts.find(selector).fetch();
         if (accounts) return _.map(accounts, function (account) {
-            return _.pick(account, 'firstName', 'activityPreference', 'picture', 'bio', 'gender');
+            return _.pick(account, 'firstName', 'activityPreference', 'picture', 'bio', 'gender', 'ageRange');
         });
 
         throw new Meteor.Error(403, "Users do not exist");
@@ -85,23 +89,30 @@ Meteor.methods({
      * @method 'AccountsSvc.updateUser'
      * @param {Object} selector
      * @param {Object} data
-     * @param {String} currentUserFacebookAccessToken
+     * @param {String} currentUserVentureId
+     * @param {String} currentUserName
+     * @param {String} currentUserEmail
      * @return {Number} num_of_accounts_updated
      */
-    'Accounts.updateUser': function (selector, data, currentUserFacebookAccessToken) {
+    'Accounts.updateUser': function (selector, data, currentUserVentureId, currentUserName, currentUserEmail) {
         var num_of_accounts_updated = 0;
         var targetAccount;
 
         check(selector, Object);
         check(data, Object);
-        check(currentUserFacebookAccessToken, String);
+        check(currentUserVentureId, String);
+        check(currentUserName, String);
+        check(currentUserEmail, String);
 
         targetAccount = db.accounts.findOne(selector);
-        if (targetAccount && targetAccount.services.facebookAccessToken === currentUserFacebookAccessToken) {
+        if (targetAccount &&
+          (targetAccount.ventureId === currentUserVentureId
+            && targetAccount.name === currentUserName
+            && targetAccount.email === currentUserEmail)
+          ) {
             num_of_accounts_updated = db.accounts.update(selector, {$set: data});
+            return num_of_accounts_updated;
         }
-
-        return num_of_accounts_updated;
 
         throw new Meteor.Error(403, "Cannot perform update");
     },
@@ -109,21 +120,21 @@ Meteor.methods({
      * delete a Venture user account from the database
      * @method 'AccountsSvc.deleteUser'
      * @param {Object} selector
-     * @param {String} currentUserFacebookAccessToken
+     * @param {String} currentUserVentureId
      * @return {Object} account
      *
      * Note: User can only delete his or her own account
      * React Native code must pass the current user's facebook access token
      */
-    'Accounts.deleteUser': function (selector, currentUserFacebookAccessToken) {
+    'Accounts.deleteUser': function (selector, currentUserVentureId) {
         var num_of_accounts_deleted;
         var targetAccount;
 
         check(selector, Object);
-        check(currentUserFacebookAccessToken, String);
+        check(currentUserVentureId, String);
 
         targetAccount = db.accounts.findOne(selector);
-        if (targetAccount && targetAccount.services.facebookAccessToken === currentUserFacebookAccessToken) {
+        if (targetAccount && targetAccount.ventureId === currentUserVentureId) {
             num_of_accounts_deleted = db.accounts.remove(selector);
             return num_of_accounts_deleted;
         }
