@@ -161,7 +161,7 @@ Schema.Account = new SimpleSchema({
     },
     bio: {
         type: String,
-        regEx: /^[a-z0-9A-Z \/_?:;.,-]{0,15}$/,
+        regEx: /^.{0,25}$/,
         label: "bio",
         optional: true
     },

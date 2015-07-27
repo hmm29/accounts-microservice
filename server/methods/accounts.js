@@ -13,6 +13,7 @@ Meteor.methods({
      */
     'Accounts.addUser': function (data, newUserVentureId, currentUserVentureId) {
         var ventureIdsDoMatch = (newUserVentureId === currentUserVentureId);
+        data = JSON.parse(data);
 
         if (!db.accounts.findOne(data) && ventureIdsDoMatch) {
             var accountId;
@@ -50,7 +51,7 @@ Meteor.methods({
         check(selector, Object);
 
         account = db.accounts.findOne(selector);
-        if (account) return _.pick(account, 'firstName', 'activityPreference', 'picture', 'bio', 'gender', 'ageRange');
+        if (account) return _.pick(account, 'firstName', 'activityPreference', 'picture', 'bio', 'gender', 'ageRange', 'discoveryPreferences', '_id');
 
         throw new Meteor.Error(404, "User does not exist");
     },
@@ -67,7 +68,7 @@ Meteor.methods({
 
         accounts = db.accounts.find(selector).fetch();
         if (accounts) return _.map(accounts, function (account) {
-            return _.pick(account, 'firstName', 'activityPreference', 'picture', 'bio', 'gender', 'ageRange');
+            return _.pick(account, 'firstName', 'activityPreference', 'picture', 'bio', 'gender', 'ageRange','_id');
         });
 
         throw new Meteor.Error(403, "Users do not exist");
