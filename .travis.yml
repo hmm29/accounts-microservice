@@ -1,8 +1,9 @@
 sudo: required
 language: node_js
 node_js:
-  - "0.12"
-  - "0.11"
   - "0.10"
+  - "0.11"
+  - "0.12"
+
 before_install:
   - "curl -L https://raw.githubusercontent.com/arunoda/travis-ci-meteor-packages/master/configure.sh | /bin/sh"p://git.io/ejPSng | /bin/sh"
