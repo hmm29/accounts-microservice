@@ -1,4 +1,4 @@
-sudo: required
+sudo: false
 language: node_js
 node_js:
   - "0.10"
@@ -6,3 +6,5 @@ node_js:
   - "0.12"
 before_install:
   - "curl -L https://raw.githubusercontent.com/arunoda/travis-ci-meteor-packages/master/configure.sh | /bin/sh"
+after_success:
+  - "curl --data "build=true" -X POST https://registry.hub.docker.com/u/gergelyke/docker-codeship-project/trigger/TOKEN/"
